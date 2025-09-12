@@ -1,264 +1,229 @@
-"use client";
+"use client"
 
-import React, { useState } from 'react';
-import { Search, User, Clock, Eye, Globe, Hash, ExternalLink, Loader2, AlertCircle } from 'lucide-react';
+import type React from "react"
+import { useState } from "react"
+import { Search, User, Eye, Globe, Hash, ExternalLink, Loader2, AlertCircle, Play, Heart } from "lucide-react"
+import ThemeSwitcher from "@/components/theme-switcher"
 
 interface ReelData {
-  url: string;
-  caption: string;
-  transcript: string;
-  author: string;
-  hashtags: string[];
-  duration: string;
-  language: string;
-  view_count: string;
-  like_count?: string;
-  comment_count?: string;
+  instagram_url: string
+  caption: string
+  transcript: string
+  metadata: {
+    author: string
+    hashtags: string[]
+    duration_seconds: number
+    language: string
+    view_count: number
+    like_count?: number
+    comment_count?: number
+  }
 }
 
-const SaraṃśaPage: React.FC = () => {
-  const [url, setUrl] = useState('');
-  const [data, setData] = useState<ReelData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const SaramsaPage: React.FC = () => {
+  const [url, setUrl] = useState("")
+  const [data, setData] = useState<ReelData | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const isValidInstagramUrl = (url: string): boolean => {
-    const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|p)\/[A-Za-z0-9_-]+\/?$/;
-    return instagramReelRegex.test(url);
-  };
+    const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|p)\/[A-Za-z0-9_-]+\/?$/
+    return instagramReelRegex.test(url)
+  }
 
   const handleSubmit = async (e?: React.FormEvent | React.KeyboardEvent) => {
-    e?.preventDefault();
-    
+    e?.preventDefault()
+
     if (!url.trim()) {
-      setError('Please enter an Instagram Reel URL');
-      return;
+      setError("Please enter a content URL")
+      return
     }
 
     if (!isValidInstagramUrl(url)) {
-      setError('Please enter a valid Instagram Reel URL');
-      return;
+      setError("Please enter a valid content URL")
+      return
     }
 
-    setLoading(true);
-    setError(null);
-    setData(null);
+    setLoading(true)
+    setError(null)
+    setData(null)
 
     try {
-      const response = await fetch('https://daunrodo.onrender.com/api/instagram/reel', {
-        method: 'POST',
+      const response = await fetch("https://daunrodo.onrender.com/api/instagram/reel", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ url }),
-      });
+      })
 
       if (!response.ok) {
-        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        throw new Error(`Analysis failed: ${response.status} ${response.statusText}`)
       }
 
-      const result = await response.json();
-      setData(result);
+      const result = await response.json()
+      setData(result)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to analyze the reel. Please try again.');
+      setError(err instanceof Error ? err.message : "Failed to analyze content. Please try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const formatNumber = (num: string | undefined): string => {
-    if (!num) return 'N/A';
-    const number = parseInt(num.replace(/,/g, ''));
-    if (number >= 1000000) return `${(number / 1000000).toFixed(1)}M`;
-    if (number >= 1000) return `${(number / 1000).toFixed(1)}K`;
-    return num;
-  };
+  const formatNumber = (num: number | undefined): string => {
+    if (!num) return "0"
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`
+    return num.toString()
+  }
+
+  const formatDuration = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return mins > 0 ? `${mins}:${secs.toString().padStart(2, "0")}` : `${secs}s`
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto px-4 py-12 pt-8 sm:py-16 sm:pt-8">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-light text-gray-900 mb-3">
-            sārāṃśa
-          </h1>
-          {/* <p className="text-lg text-gray-600 font-light">
-            Instagram Reel Content Analyzer
-          </p> */}
+        <div className="flex items-center justify-center mb-2">
+        <ThemeSwitcher/>
+        </div>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl font-medium text-foreground mb-4 tracking-tight">sārāṃśa</h1>
+          <p className="text-lg text-muted-foreground font-light max-w-md mx-auto">
+            Extract insights from social content
+          </p>
         </div>
 
-        {/* URL Input Form */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8 mb-8">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-                Instagram Reel URL
-              </label>
-              <div className="relative">
-                <input
-                  type="url"
-                  id="url"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
-                  placeholder="https://www.instagram.com/reel/..."
-                  className="w-full px-4 py-3 pr-12 border text-background caret-background placeholder:text-gray-400 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  disabled={loading}
-                />
-                <Search className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
-              </div>
+        {/* Input Section */}
+        <div className="mb-12">
+          <div className="relative max-w-2xl mx-auto">
+            <div className="relative">
+              <input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
+                placeholder="Paste content URL here..."
+                className="w-full px-6 py-4 pr-14 text-lg bg-card border border-border rounded-2xl focus:ring-2 focus:ring-ring focus:border-transparent transition-all placeholder:text-muted-foreground"
+                disabled={loading}
+              />
+              <button
+                onClick={handleSubmit}
+                disabled={loading || !url.trim()}
+                className="absolute right-2 top-2 bottom-2 px-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-all flex items-center justify-center"
+              >
+                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
+              </button>
             </div>
-            
-            <button
-              onClick={handleSubmit}
-              disabled={loading || !url.trim()}
-              className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Analyzing...
-                </>
-              ) : (
-                'Analyze Reel'
-              )}
-            </button>
-          </div>
 
-          {error && (
-            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          )}
+            {error && (
+              <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-xl flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+                <p className="text-destructive text-sm">{error}</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Results */}
         {data && (
-          <div className="space-y-6">
-            {/* Source URL */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-3">Source</h2>
-              <a
-                href={data.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 break-all flex items-center gap-2 group"
-              >
-                <span className="break-all">{data.url}</span>
-                <ExternalLink className="h-4 w-4 flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
-              </a>
+          <div className="space-y-8">
+            {/* Stats Overview */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <Eye className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.view_count)}</p>
+                <p className="text-sm text-muted-foreground">Views</p>
+              </div>
+
+              {data.metadata.like_count !== undefined && (
+                <div className="bg-card border border-border rounded-xl p-4 text-center">
+                  <Heart className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.like_count)}</p>
+                  <p className="text-sm text-muted-foreground">Likes</p>
+                </div>
+              )}
+
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <Play className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <p className="text-2xl font-semibold text-foreground">
+                  {formatDuration(data.metadata.duration_seconds)}
+                </p>
+                <p className="text-sm text-muted-foreground">Duration</p>
+              </div>
+
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <Globe className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <p className="text-2xl font-semibold text-foreground uppercase">{data.metadata.language}</p>
+                <p className="text-sm text-muted-foreground">Language</p>
+              </div>
+            </div>
+
+            {/* Author & Source */}
+            <div className="bg-card border border-border rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
+                    <User className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">@{data.metadata.author}</p>
+                    <p className="text-sm text-muted-foreground">Creator</p>
+                  </div>
+                </div>
+                <a
+                  href={data.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm font-medium"
+                >
+                  View Original
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </div>
             </div>
 
             {/* Caption */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Caption</h2>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                {data.caption}
-              </p>
+            <div className="bg-card border border-border rounded-2xl p-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">Caption</h2>
+              <p className="text-foreground leading-relaxed whitespace-pre-wrap">{data.caption}</p>
             </div>
 
             {/* Transcript */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Transcript</h2>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                {data.transcript}
-              </p>
-            </div>
-
-            {/* Metadata */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-6">Metadata</h2>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Author */}
-                <div className="flex items-center gap-3">
-                  <User className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Author</p>
-                    <p className="font-medium text-gray-900">{data.author}</p>
-                  </div>
-                </div>
-
-                {/* Duration */}
-                <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Duration</p>
-                    <p className="font-medium text-gray-900">{data.duration}</p>
-                  </div>
-                </div>
-
-                {/* Language */}
-                <div className="flex items-center gap-3">
-                  <Globe className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Language</p>
-                    <p className="font-medium text-gray-900">{data.language}</p>
-                  </div>
-                </div>
-
-                {/* Views */}
-                <div className="flex items-center gap-3">
-                  <Eye className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Views</p>
-                    <p className="font-medium text-gray-900">{formatNumber(data.view_count)}</p>
-                  </div>
-                </div>
-
-                {/* Likes */}
-                {data.like_count && (
-                  <div className="flex items-center gap-3">
-                    <div className="h-5 w-5 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">♡</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Likes</p>
-                      <p className="font-medium text-gray-900">{formatNumber(data.like_count)}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Comments */}
-                {data.comment_count && (
-                  <div className="flex items-center gap-3">
-                    <div className="h-5 w-5 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">💬</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Comments</p>
-                      <p className="font-medium text-gray-900">{formatNumber(data.comment_count)}</p>
-                    </div>
-                  </div>
-                )}
+            <div className="bg-card border border-border rounded-2xl p-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">Transcript</h2>
+              <div className="prose prose-neutral dark:prose-invert max-w-none">
+                <p className="text-foreground leading-relaxed">{data.transcript}</p>
               </div>
-
-              {/* Hashtags */}
-              {data.hashtags && data.hashtags.length > 0 && (
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Hash className="h-5 w-5 text-gray-500" />
-                    <h3 className="text-sm font-medium text-gray-900">Hashtags</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {data.hashtags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700 border border-gray-200"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
+
+            {/* Hashtags */}
+            {data.metadata.hashtags && data.metadata.hashtags.length > 0 && (
+              <div className="bg-card border border-border rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Hash className="h-5 w-5 text-muted-foreground" />
+                  <h2 className="text-xl font-semibold text-foreground">Tags</h2>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {data.metadata.hashtags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center px-3 py-1.5 rounded-full bg-muted text-sm text-foreground font-medium border border-border hover:bg-muted/80 transition-colors"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SaraṃśaPage;
+export default SaramsaPage
