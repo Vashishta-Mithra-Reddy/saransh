@@ -4,7 +4,7 @@ import { Dithering } from "@paper-design/shaders-react";
 import { motion } from "framer-motion";
 
 export default function Loading() {
-  const text = "Fetching".split("");
+  const text = "Loading...".split("");
 
   return (
     <div
@@ -19,15 +19,18 @@ export default function Loading() {
         {text.map((char, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0.5, scale: 0.95 }}
-          animate={{ opacity: [0.4, 1, 0.4], scale: [0.95, 1.05, 0.95] }}
+          initial={{ opacity: 0.5, y: 0 }}  // Initial Y position at 0
+          animate={{
+            opacity: [0.4, 1, 0.4],  // Opacity animation as before
+            // y: [0, -2, 0],  // Move up and down on the Y axis
+          }}
           transition={{
-            duration: 1.5,
+            duration: 2,
             repeat: Infinity,
-            delay: i * 0.1,
+            delay: i * 0.2,
             ease: "easeInOut",
           }}
-          className="text-xl tracking-wide"
+          className="text-2xl inline-block" // Added inline-block here
         >
           {char}
         </motion.span>
