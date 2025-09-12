@@ -4,6 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { Search, User, Eye, Globe, Hash, ExternalLink, Loader2, AlertCircle, Play, Heart } from "lucide-react"
 import ThemeSwitcher from "@/components/theme-switcher"
+import Loading from "@/components/loading"
 
 interface ReelData {
   instagram_url: string
@@ -34,12 +35,19 @@ const SaramsaPage: React.FC = () => {
   const handleSubmit = async (e?: React.FormEvent | React.KeyboardEvent) => {
     e?.preventDefault()
 
-    if (!url.trim()) {
+    let cleanedUrl = url.trim();
+    // Strip everything after '?' for tracking data
+    const questionMarkIndex = cleanedUrl.indexOf('/?');
+    if (questionMarkIndex !== -1) {
+      cleanedUrl = cleanedUrl.substring(0, questionMarkIndex);
+    }
+
+    if (!cleanedUrl) {
       setError("Please enter a content URL")
       return
     }
 
-    if (!isValidInstagramUrl(url)) {
+    if (!isValidInstagramUrl(cleanedUrl)) {
       setError("Please enter a valid content URL")
       return
     }
@@ -54,7 +62,7 @@ const SaramsaPage: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url: cleanedUrl }), // Use the cleaned URL here
       })
 
       if (!response.ok) {
@@ -129,7 +137,10 @@ const SaramsaPage: React.FC = () => {
         </div>
 
         {/* Results */}
-        {data && (
+        {loading ? (
+          <Loading /> // Display Loading component when loading is true
+        ) : (
+          data && (
           <div className="space-y-8">
             {/* Stats Overview */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -164,7 +175,7 @@ const SaramsaPage: React.FC = () => {
 
             {/* Author & Source */}
             <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
                     <User className="h-6 w-6 text-muted-foreground" />
@@ -220,7 +231,7 @@ const SaramsaPage: React.FC = () => {
               </div>
             )}
           </div>
-        )}
+        ))}
       </div>
     </div>
   )
