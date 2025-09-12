@@ -115,7 +115,7 @@ const SaramsaPage: React.FC = () => {
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
                 placeholder="Paste content URL here..."
-                className="w-full px-6 py-4 pr-14 text-lg bg-card border border-border rounded-2xl focus:ring-2 focus:ring-ring focus:border-transparent transition-all placeholder:text-muted-foreground"
+                className="w-full px-6 py-4 pr-20 text-lg bg-card border border-border rounded-2xl focus:ring-2 focus:ring-ring focus:border-transparent transition-all placeholder:text-muted-foreground"
                 disabled={loading}
               />
               <button
