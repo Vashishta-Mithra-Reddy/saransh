@@ -193,7 +193,7 @@ const SaramsaPage: React.FC = () => {
                       className="font-semibold text-foreground"
                       href={data.metadata.author ? `https://www.instagram.com/${data.metadata.author}` : '#'}
                     >
-                      {data.metadata.author || 'Instagram'}
+                      {data.metadata.author ? `@${data.metadata.author}` : 'Instagram'}
                     </Link>
                     <p className="text-sm text-muted-foreground">Creator</p>
                   </div>
