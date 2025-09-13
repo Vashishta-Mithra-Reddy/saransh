@@ -50,7 +50,7 @@ const SaramsaPage: React.FC = () => {
     }
 
     if (!isValidInstagramUrl(cleanedUrl)) {
-      setError("Please enter a valid content URL")
+      setError("Please enter a valid URL")
       return
     }
 
@@ -131,10 +131,15 @@ const SaramsaPage: React.FC = () => {
             </div>
 
             {error && (
-              <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-xl flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                <p className="text-destructive text-sm">{error}</p>
-              </div>
+              <motion.div 
+              initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="mt-4 p-4 bg-destructive/10 dark:bg-destructive/5 border border-destructive/20 dark:border-destructive/40 rounded-xl flex items-center gap-3">
+                <AlertCircle className="h-6 w-6 text-destructive dark:text-red-400 mt-0.5 flex-shrink-0" />
+                <p className="text-destructive dark:text-red-400 text-sm">{error}</p>
+              </motion.div>
             )}
           </div>
         </motion.div>
