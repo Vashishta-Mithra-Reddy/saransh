@@ -18,10 +18,10 @@ export default function Loading() {
       <div className="flex flex-col items-center justify-center">
         {/* Visual effect */}
         <motion.div
-          initial={{ opacity: 0.5, scale: 0.9, filter: "blur(5px)" }}
+          initial={{ opacity: 0, scale: 0.9, filter: "blur(5px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           exit={{ opacity: 0, scale: 0.5 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
         >
           {effectIndex === null ? null : effectIndex === 0 ? (
             <LiquidMetal
