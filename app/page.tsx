@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Search, User, Eye, Globe, Hash, ExternalLink, Loader2, AlertCircle, Play, Heart } from "lucide-react"
 import ThemeSwitcher from "@/components/theme-switcher"
 import Loading from "@/components/loading"
+import { motion } from "framer-motion";
 
 interface ReelData {
   instagram_url: string
@@ -141,7 +142,12 @@ const SaramsaPage: React.FC = () => {
           <Loading /> // Display Loading component when loading is true
         ) : (
           data && (
-          <div className="space-y-8">
+          <motion.div 
+          initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+          animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+          transition={{ duration: 0.5 }}
+          className="space-y-8">
             {/* Stats Overview */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="bg-card border border-border rounded-xl p-4 text-center">
@@ -230,7 +236,7 @@ const SaramsaPage: React.FC = () => {
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
