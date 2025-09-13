@@ -115,14 +115,15 @@ const SaramsaPage: React.FC = () => {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
+                maxLength={2048}
                 placeholder="Paste content URL here..."
-                className="w-full px-6 py-4 pr-20 text-lg bg-card border border-border rounded-2xl focus:ring-2 focus:ring-ring focus:border-transparent transition-all placeholder:text-muted-foreground"
+                className="w-full px-6 py-4 pr-20 text-lg bg-card border border-border rounded-2xl focus:border-transparent transition-all placeholder:text-muted-foreground duration-500 focus:ring-2 focus:ring-offset-3 focus:ring-offset-background focus:ring-foreground/10 dark:focus:ring-foreground/20 focus:outline-none"
                 disabled={loading}
               />
               <button
                 onClick={handleSubmit}
                 disabled={loading || !url.trim()}
-                className="absolute right-2 top-2 bottom-2 px-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                className="absolute right-2 top-2 bottom-2 px-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-all flex items-center justify-center duration-300"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
               </button>

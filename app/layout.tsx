@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sārāṃśa | Saransh",
+  title: "Sārāṃśa | Saransh | Saramsham | Saransha",
   description: "Extract insights from social content",
 };
 
