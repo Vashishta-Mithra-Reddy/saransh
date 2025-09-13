@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Search, User, Eye, Globe, Hash, ExternalLink, Loader2, AlertCircle, Play, Heart } from "lucide-react"
+import { Search, User, Eye, Globe, Hash, ExternalLink, Loader2, AlertCircle, Play, Heart, Link } from "lucide-react"
 import ThemeSwitcher from "@/components/theme-switcher"
 import Loading from "@/components/loading"
 import { motion } from "framer-motion";
@@ -188,7 +188,12 @@ const SaramsaPage: React.FC = () => {
                     <User className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground">@{data.metadata.author}</p>
+                    <Link
+                      className="font-semibold text-foreground"
+                      href={data.metadata.author ? `https://www.instagram.com/${data.metadata.author}` : '#'}
+                    >
+                      {data.metadata.author || 'Instagram'}
+                    </Link>
                     <p className="text-sm text-muted-foreground">Creator</p>
                   </div>
                 </div>
