@@ -59,7 +59,7 @@ export default function Loading() {
         </motion.div>
 
         {/* Animated text */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0.5, scale: 0.9, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           exit={{ opacity: 0, scale: 0.5 }}
@@ -81,7 +81,7 @@ export default function Loading() {
               {char}
             </motion.span>
           ))}
-        </motion.div>
+        </motion.div> */}
         
       </div>
     </div>
