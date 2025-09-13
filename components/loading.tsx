@@ -1,16 +1,16 @@
 "use client";
 
-import { Dithering, LiquidMetal } from "@paper-design/shaders-react";
+import { Dithering, LiquidMetal, Metaballs } from "@paper-design/shaders-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function Loading() {
-  const text = "Loading...".split("");
+  // const text = "Loading...".split("");
 
-  const [showLiquidMetal, setShowLiquidMetal] = useState<boolean | null>(null);
+  const [effectIndex, setEffectIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    setShowLiquidMetal(Math.random() < 0.5);
+    setEffectIndex(Math.floor(Math.random() * 3)); // 0, 1, or 2
   }, []);
 
   return (
@@ -23,10 +23,10 @@ export default function Loading() {
           exit={{ opacity: 0, scale: 0.5 }}
           transition={{ duration: 0.5 }}
         >
-          {showLiquidMetal === null ? null : showLiquidMetal ? (
+          {effectIndex === null ? null : effectIndex === 0 ? (
             <LiquidMetal
               style={{ height: 500, width: 500 }}
-              colorBack="#ffffff00"   
+              colorBack="#ffffff00"
               colorTint="#ffffff"
               repetition={4}
               softness={0.3}
@@ -41,10 +41,10 @@ export default function Loading() {
               rotation={0}
               speed={1}
             />
-          ) : (
+          ) : effectIndex === 1 ? (
             <Dithering
               style={{ height: 500, width: 500 }}
-              colorBack="#ffffff00"   
+              colorBack="#ffffff00"
               colorFront="#00b3ff"
               shape="sphere"
               type="4x4"
@@ -52,6 +52,19 @@ export default function Loading() {
               offsetX={0}
               offsetY={0}
               scale={0.6}
+              rotation={0}
+              speed={1}
+            />
+          ) : (
+            <Metaballs
+              style={{ height: 500, width: 500 }}
+              colors={["#145cfc","#0341c9","#155dfc"]}
+              colorBack="#ffffff00"
+              count={10}
+              size={0.83}
+              offsetX={0}
+              offsetY={0}
+              scale={0.9}
               rotation={0}
               speed={1}
             />
