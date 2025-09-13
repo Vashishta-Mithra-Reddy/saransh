@@ -101,14 +101,14 @@ const SaramsaPage: React.FC = () => {
         <ThemeSwitcher/>
         </div>
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-medium text-foreground mb-4 tracking-tight">sārāṃśa</h1>
-          <p className="text-lg text-muted-foreground font-light max-w-md mx-auto">
+          <motion.h1 initial={{ opacity: 0, y: 20, filter:"blur(5px)" }} animate={{ opacity: 1, y: 0, filter:"blur(0px)" }} transition={{ duration: 0.4 }} className="text-4xl sm:text-5xl font-medium text-foreground mb-4 tracking-tight">sārāṃśa</motion.h1>
+          <motion.p initial={{ opacity: 0, y: 20, filter:"blur(5px)" }} animate={{ opacity: 1, y: 0, filter:"blur(0px)" }} transition={{ duration: 0.4, ease: "easeInOut", delay: 0.1 }} className="text-lg text-muted-foreground font-light max-w-md mx-auto">
             Extract insights from social content
-          </p>
+          </motion.p>
         </div>
 
         {/* Input Section */}
-        <div className="mb-12">
+        <motion.div initial={{ opacity: 0, y: 20, filter:"blur(5px)" }} animate={{ opacity: 1, y: 0, filter:"blur(0px)" }} transition={{ duration: 0.4, ease: "easeInOut", delay: 0.2 }} className="mb-12">
           <div className="relative max-w-2xl mx-auto">
             <div className="relative">
               <input
@@ -137,7 +137,7 @@ const SaramsaPage: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Results */}
         {loading ? (
