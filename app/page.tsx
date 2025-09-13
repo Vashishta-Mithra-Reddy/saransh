@@ -151,62 +151,47 @@ const SaramsaPage: React.FC = () => {
           data && (
           <div className="space-y-8">
             {/* Stats Overview */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <motion.div 
+            <motion.div 
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 transition={{ duration: 0.5 }}
-                className="bg-card border border-border rounded-xl p-4 text-center">
+                className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Eye className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                 <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.view_count)}</p>
                 <p className="text-sm text-muted-foreground">Views</p>
-              </motion.div>
+              </div>
 
               {data.metadata.like_count !== undefined && (
-                <motion.div 
-                initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-card border border-border rounded-xl p-4 text-center">
+                <div className="bg-card border border-border rounded-xl p-4 text-center">
                   <Heart className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                   <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.like_count)}</p>
                   <p className="text-sm text-muted-foreground">Likes</p>
-                </motion.div>
+                </div>
               )}
 
-              <motion.div 
-                initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.4 }} 
-                className="bg-card border border-border rounded-xl p-4 text-center">
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Play className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                 <p className="text-2xl font-semibold text-foreground">
                   {formatDuration(data.metadata.duration_seconds)}
                 </p>
                 <p className="text-sm text-muted-foreground">Duration</p>
-              </motion.div>
+              </div>
 
-              <motion.div 
-                initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="bg-card border border-border rounded-xl p-4 text-center">
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Globe className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                 <p className="text-2xl font-semibold text-foreground uppercase">{data.metadata.language}</p>
                 <p className="text-sm text-muted-foreground">Language</p>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
 
             {/* Author & Source */}
             <motion.div 
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.8 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 className="bg-card border border-border rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -240,7 +225,7 @@ const SaramsaPage: React.FC = () => {
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
                 className="bg-card border border-border rounded-2xl p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">Caption</h2>
               <p className="text-foreground leading-relaxed whitespace-pre-wrap">{data.caption}</p>
@@ -251,7 +236,7 @@ const SaramsaPage: React.FC = () => {
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 1.2 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
                 className="bg-card border border-border rounded-2xl p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">Transcript</h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none">
@@ -265,7 +250,7 @@ const SaramsaPage: React.FC = () => {
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 1.4 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
                 className="bg-card border border-border rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Hash className="h-5 w-5 text-muted-foreground" />
