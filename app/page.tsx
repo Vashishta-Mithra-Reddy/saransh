@@ -156,20 +156,20 @@ const SaramsaPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 transition={{ duration: 0.5 }}
-                className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Eye className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                 <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.view_count)}</p>
                 <p className="text-sm text-muted-foreground">Views</p>
               </div>
 
-              {data.metadata.like_count !== undefined && (
+              {/* {data.metadata.like_count !== undefined && (
                 <div className="bg-card border border-border rounded-xl p-4 text-center">
                   <Heart className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                   <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.like_count)}</p>
                   <p className="text-sm text-muted-foreground">Likes</p>
                 </div>
-              )}
+              )} */}
 
               <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Play className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
