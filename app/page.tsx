@@ -12,6 +12,7 @@ interface ReelData {
   instagram_url: string
   caption: string
   transcript: string
+  videoUrl: string
   metadata: {
     author: string
     hashtags: string[]
@@ -131,12 +132,12 @@ const SaramsaPage: React.FC = () => {
             </div>
 
             {error && (
-              <motion.div 
-              initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: 20, filter: "blur(5px)" }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="mt-4 p-4 bg-destructive/10 dark:bg-destructive/5 border border-destructive/20 dark:border-destructive/40 rounded-xl flex items-center gap-3">
+              <motion.div
+                initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="mt-4 p-4 bg-destructive/10 dark:bg-destructive/5 border border-destructive/20 dark:border-destructive/40 rounded-xl flex items-center gap-3">
                 <AlertCircle className="h-6 w-6 text-destructive dark:text-red-400 mt-0.5 flex-shrink-0" />
                 <p className="text-destructive dark:text-red-400 text-sm">{error}</p>
               </motion.div>
@@ -150,12 +151,30 @@ const SaramsaPage: React.FC = () => {
         ) : (
           data && (
           <div className="space-y-8">
+            {/* Video Player */}
+            <motion.div
+                initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+                transition={{ duration: 0.5 }}
+                className="bg-card border border-border rounded-2xl p-2"
+            >
+                <video
+                    key={data.videoUrl}
+                    src={data.videoUrl}
+                    controls
+                    loop
+                    playsInline
+                    className="w-full h-auto rounded-xl"
+                />
+            </motion.div>
+
             {/* Stats Overview */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Eye className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
@@ -163,18 +182,10 @@ const SaramsaPage: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Views</p>
               </div>
 
-              {/* {data.metadata.like_count !== undefined && (
-                <div className="bg-card border border-border rounded-xl p-4 text-center">
-                  <Heart className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-2xl font-semibold text-foreground">{formatNumber(data.metadata.like_count)}</p>
-                  <p className="text-sm text-muted-foreground">Likes</p>
-                </div>
-              )} */}
-
               <div className="bg-card border border-border rounded-xl p-4 text-center">
                 <Play className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
                 <p className="text-2xl font-semibold text-foreground">
-                  {formatDuration(data.metadata.duration_seconds)}
+                    {formatDuration(data.metadata.duration_seconds)}
                 </p>
                 <p className="text-sm text-muted-foreground">Duration</p>
               </div>
@@ -187,11 +198,11 @@ const SaramsaPage: React.FC = () => {
             </motion.div>
 
             {/* Author & Source */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
                 className="bg-card border border-border rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -221,22 +232,22 @@ const SaramsaPage: React.FC = () => {
             </motion.div>
 
             {/* Caption */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
                 className="bg-card border border-border rounded-2xl p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">Caption</h2>
               <p className="text-foreground leading-relaxed whitespace-pre-wrap">{data.caption}</p>
             </motion.div>
 
             {/* Transcript */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.6 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
                 className="bg-card border border-border rounded-2xl p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">Transcript</h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none">
@@ -246,12 +257,12 @@ const SaramsaPage: React.FC = () => {
 
             {/* Hashtags */}
             {data.metadata.hashtags && data.metadata.hashtags.length > 0 && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                transition={{ duration: 0.5, delay: 0.8 }}
-                className="bg-card border border-border rounded-2xl p-6">
+              <motion.div
+                  initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+                  animate={{ opacity: 1, y: 0 , filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+                  transition={{ duration: 0.5, delay: 1.0 }}
+                  className="bg-card border border-border rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Hash className="h-5 w-5 text-muted-foreground" />
                   <h2 className="text-xl font-semibold text-foreground">Tags</h2>
